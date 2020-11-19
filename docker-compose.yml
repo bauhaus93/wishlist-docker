@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  backend:
+    build:
+      dockerfile: backend/Dockerfile
+      context: https://github.com/bauhaus93/wishlist-backend.git
+    environment:
+      - BACKEND_ADDRESS=0.0.0.0:8080
+      - DATABASE_URL=${DATABASE_URL}
+    expose:
+      - 8080
+
+  frontend:
+    depends_on:
+      - backend
+    build: ./frontend
+    environment:
+      - BACKEND_ADDRESS=backend:8080
+      - NGINX_ENTRYPOINT_QUIET_LOGS=1
+    ports:
+      - 80:80
